@@ -42,7 +42,31 @@ void Bot::Logging(bool log)
 {
     this->log = log;
 }
-
+void Bot::ClearLog()
+{
+    DBConnect::clearTable();
+}
+void Bot::AddLog(string name, string msg) {
+    int t = time(0);
+    stringstream date; date << t;
+    DBConnect::insertLog(date.str().c_str(), name.c_str(), msg.c_str());
+}
+void Bot::GetLog()
+{
+    string chatlog = DBConnect::getChatLog();
+    if (!chatlog.empty())
+        con->Send("PRIVMSG #" + con->GetChannel() + "  :" + chatlog + "\r\n");
+    else
+        con->Send("PRIVMSG #" + con->GetChannel() + "  :Kein Log vorhanden...\r\n");
+}
+void Bot::GetLastSeen(string nickname)
+{
+    string date = DBConnect::getLastSeen(nickname.c_str());
+    if (!date.empty())
+        con->Send("PRIVMSG #" + con->GetChannel() + " :" + date);
+    else
+        con->Send("PRIVMSG #" + con->GetChannel() + " :" + nickname + " wurde noch nicht geloggt...\r\n");
+}
 
 int Bot::BotFunctions(string buffer)
 {

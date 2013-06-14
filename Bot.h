@@ -6,7 +6,8 @@
 #include <algorithm>
 #include <sstream>
 #include "Connection.h"
-
+#include "DBConnect.h"
+#include "MsgParser.h"
 
 class Bot
 {
